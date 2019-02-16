@@ -50,7 +50,7 @@ var config = {
     },
     plugins: [
         new CopyWebpackPlugin([
-            {from: 'src/client/app/background.png'},
+            //{from: 'src/client/app/background.png'},
             {from: 'src/client/app/app.css'},
             {from: 'node_modules/bootstrap3/dist', to:'bootstrap'},
         ])]
