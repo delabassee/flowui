@@ -6,14 +6,15 @@ Visualisation tool for showing what's going on with Fn Flow in real time.
 
 Assuming you are already running Fn Server on port 8080 and Flow Server (previously known as 'Completer') on port 8081 in Docker.
 
-Grab the internal docker network IP 
+Grab the internal Docker network IP 
 ```bash
 export DOCKER_LOCALHOST=$(docker inspect --type container -f '{{.NetworkSettings.Gateway}}' functions)
 ```
-
+and run the Flow UI image.
 ```bash 
 docker run -p3000:3000 -e API_URL=http://$DOCKER_LOCALHOST:8080 -e COMPLETER_BASE_URL=http://$DOCKER_LOCALHOST:8081 fnproject/flow:ui
 ```
+The Flow UI should be available on http://localhost:3000.
 
 ## Running locally 
 
