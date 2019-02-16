@@ -1,7 +1,6 @@
 # Fn Flow  UI  
 
-
-This is a simple visualisation tool for showing what's going on with Fn Flow in real time. 
+Visualisation tool for showing what's going on with Fn Flow in real time. 
 
 ## Running with Docker
 
