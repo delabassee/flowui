@@ -16,7 +16,7 @@ export DOCKER_LOCALHOST=$(docker inspect --type container -f '{{.NetworkSettings
 docker run -p3000:3000 -e API_URL=http://$DOCKER_LOCALHOST:8080 -e COMPLETER_BASE_URL=http://$DOCKER_LOCALHOST:8081 fnproject/flow:ui
 ```
 
-## running locally 
+## Running locally 
 
 You need nodejs (tested with 8.5.0).
 
