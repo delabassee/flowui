@@ -188,7 +188,7 @@ class Graph {
 
         updateStage = updateStage.bind(this);
         let evtType = Graph.getEventType(evt)
-        console.log(`Processing event of type ${evtType}`, evt)
+        //console.log(`Processing event of type ${evtType}`, evt)
         if (evt.graph_created) {
             let start = Date.parse(evt[evtType].ts);
 
@@ -265,7 +265,7 @@ class Graph {
             let thenComposedNode = this.getNode(evt[evtType].stage_id);
             let newNode = this.getNode(evt[evtType].composed_stage_id);
             thenComposedNode.composed_node = newNode;
-            console.log(`using ${newNode.id()} (${newNode.op}) in place of ${thenComposedNode.id()} ${thenComposedNode.op}`);
+            //console.log(`using ${newNode.id()} (${newNode.op}) in place of ${thenComposedNode.id()} ${thenComposedNode.op}`);
 
             this.getNodes().forEach((node) => {
                 node.dependencies = node.dependencies.map((dep) => {

@@ -21,7 +21,7 @@ class Subscription {
 
         this.oboe = oboe({'url': url, cached: false})
             .node('result', (result) => {
-                console.log("Received event from stream", result);
+                //console.log("Received event from stream", result);
 
                 if (this.resmeSeq) {
                     this.lastEvent = result.seq;

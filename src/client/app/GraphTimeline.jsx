@@ -10,6 +10,8 @@ const zoomLevels = [0.01, 0.03, 0.06, 0.075, 0.1, 0.2, 0.5];
 class GraphTimeline extends React.Component {
     constructor(props) {
         super(props);
+        this.fetchApps();
+
         this.state = {
             onNodeSelected: props.onNodeSelected,
             graph: props.graph,
@@ -41,6 +43,9 @@ class GraphTimeline extends React.Component {
             // id()
             selectedDeps: new Map(),
             nodeHeight: 30,
+
+            appsId: new Array(), // will hold all Apps Id
+            funcId: new Map(), // funcId-funcName
         };
         this.selectNode = this.selectNode.bind(this);
         this.manualScrollX = this.manualScrollX.bind(this);
@@ -51,24 +56,52 @@ class GraphTimeline extends React.Component {
         this.playPauseButtonClicked = this.playPauseButtonClicked.bind(this);
     }
 
+    fetchApps() {
+        let url = "/fn/v2/apps";
+        fetch(url)
+            .then((response) => {
+                return response.json()
+            })
+            .then((json) => {
+                for (var i = 0; i < json.items.length; i++) {
+                    //console.log('fetchApps | response[' + i + '].id : ' + json.items[i].id);
+                    let appsIdClone = this.state.appsId.slice();
+                    appsIdClone[i] = json.items[i].id;
+                    this.setState({appsId: appsIdClone});
+                    this.fetchFuncId(json.items[i].id);
+                }
+            });        
+    }
 
-
+    fetchFuncId(appId){
+        let url = '/fn/v2/fns?app_id='+appId;
+        fetch(url)
+            .then((response) => {
+                return response.json()
+            })
+            .then((json) => {
+                //console.log('fetchFuncId for apps ' + appId + ' with '+ json.items.length + ' items.')
+                let functions = new Map();
+                for (var i = 0; i < json.items.length; i++) {
+                    console.log('fetchFuncId |  >> ' + json.items[i].id + ' : ' + json.items[i].name);
+                    functions.set(json.items[i].id, json.items[i].name);
+                    this.state.funcId.set(json.items[i].id, json.items[i].name);
+                }
+            });
+    }
 
     componentWillReceiveProps(props) {
         if (props.graph) {
-
             this.updateGraphDetails(props.graph)
         }
         if (props.size) {
             this.setState({width: props.size.width, viewPortWidth: props.size.width - this.state.pendingWidth});
         }
-
     }
 
     // show  this node from the default view  - hides messy no-op nodes that break vertical density  (TODO remove this when we have parent-heritage)
     isNodeShownByDefault(node) {
         return node.started !== node.completed;
-
     }
 
     setZoomLevel(level) {
@@ -77,23 +110,18 @@ class GraphTimeline extends React.Component {
         this.updateGraphDetails(this.state.graph);
     }
 
-
     updateGraphDetails(graph) {
-
-
         var newGraph = graph !== this.state.graph;
         let update = {graph};
 
         if (newGraph) {
-            console.log("New graph selected");
+            //console.log("New graph selected");
             update.cursorTs = graph.toBrowserTime(graph.created);
             this.startWatch();
         }
 
-
         const maxTs = graph.isLive() ? Date.now() : graph.toBrowserTime(graph.finished);
         let curDurationTs = (maxTs - graph.toBrowserTime(graph.created));
-
 
         if (this.state.autoScroll){
             if(curDurationTs > (this.state.viewPortWidth / this.state.pxPerMs)) {
@@ -102,15 +130,11 @@ class GraphTimeline extends React.Component {
             if(this.state.autoVScroll){
                 update.verticalScrollRatio = 1.0;
                 update.verticalScrollPosition = this.state.viewPortHeight -this.state.scrollBarHeight;
-
             }
         }else{
             update.cursorTs = Math.min(this.state.cursorTs,maxTs - this.state.viewPortWidth / this.state.pxPerMs);
             update.cursorTs = Math.max(update.cursorTs,graph.toBrowserTime(graph.created));
-
         }
-
-
 
         if (graph.isLive()) {
             update.maxTimeStamp = Date.now();
@@ -122,7 +146,7 @@ class GraphTimeline extends React.Component {
 
         let timeline;
         if (this.state.lastEvent !== lastGraphEvent) {
-            console.debug("Updating graph");
+            //console.debug("Updating graph");
             timeline = update.timeline = graph.createTimeline(this.isNodeShownByDefault);
             update.lastEvent = lastGraphEvent;
         } else {
@@ -195,7 +219,6 @@ class GraphTimeline extends React.Component {
         }
     }
 
-
     selectNode(node) {
         if (node === this.state.selectedNode) {
             node = null;
@@ -229,7 +252,6 @@ class GraphTimeline extends React.Component {
         </div>);
     }
 
-
     playPauseButtonClicked(){
         let newState = true;
         if(this.state.autoScroll){
@@ -243,7 +265,6 @@ class GraphTimeline extends React.Component {
         this.setState({autoScroll: newState,autoVScroll:newState});
     }
 
-
     // TODO: Use somebody elses scroll bar.
     onDragStart(e) {
         this.state.dragging = true;
@@ -253,12 +274,10 @@ class GraphTimeline extends React.Component {
             let deltaY = wmme.screenY - this.state.dragStartY;
             let maxScrollPosition = this.state.viewPortHeight - this.state.scrollBarHeight;
             let inverted = this.state.scrollBarHeight / (this.state.viewPortHeight - this.state.verticalScrollPosition);
-
             let newScrollPosition = this.state.verticalScrollPosition + (deltaY / inverted);
             newScrollPosition = Math.min(newScrollPosition, maxScrollPosition);
             newScrollPosition = Math.max(newScrollPosition, 0);
             this.state.verticalScrollPosition = newScrollPosition;
-
             this.manualScrollY(this.state.verticalScrollPosition / maxScrollPosition);
             this.state.dragStartY = wmme.screenY;
         };
@@ -272,7 +291,6 @@ class GraphTimeline extends React.Component {
             document.removeEventListener('mousemove', listeners.moveListener);
             document.removeEventListener('mouseup', listeners.upListener);
         };
-
         document.addEventListener('mouseup', listeners.upListener);
     }
 
@@ -294,11 +312,9 @@ class GraphTimeline extends React.Component {
         > Pending Events: </div>)];
 
         let nodeElements = [];
-
         let totalCostDollar = 0.0;
 
         this.state.timeline.activeNodes.forEach((node, idx) => {
-
 
             let createTs = relativeX(node.created);
 
@@ -307,8 +323,6 @@ class GraphTimeline extends React.Component {
                 return;
             }
             let rank = this.state.timeline.rankMap.get(node.id());
-
-
             let styleExtra = [];
             if (node.op === 'invokeFunction') {
                 styleExtra.push(styles.invokeFunction);
@@ -325,7 +339,6 @@ class GraphTimeline extends React.Component {
                 }
             }
 
-
             switch (node.state) {
                 case 'failed':
                     styleExtra.push(styles.failed);
@@ -338,17 +351,14 @@ class GraphTimeline extends React.Component {
                     break;
             }
 
-
             if (this.state.selectedNode === node) {
                 styleExtra.push(styles.selected);
             }
-
 
             let deps = ""
             if ((node.dependencies.length !== 0)) {
                 deps = "Dependencies: Stage " + node.dependencies.map((n) => n.id());
             }
-
 
             let startPx = relativeX(node.started);
             let widthPx;
@@ -382,17 +392,17 @@ class GraphTimeline extends React.Component {
                 nodeLabel = node.op;
             }
 
+            //dd
             if (displayNode) {
                 nodeElements.push(<div key={node.id() + "_1"}>
                         <div className={styles.node + ' ' + styleExtra.join(' ')}
                              style={runboxStyle}
                              onClick={(e) => this.selectNode(node)}
                              data-tooltip={node.op + ": " + node.state + "\n" + deps}
-                        > {node.id()}: {nodeLabel} {durationMs ? (durationMs.toFixed(0) + 'ms') : ""}  { this.props.cost ? '$' + costDollar.toFixed(7) : ''}</div>
-                    </div>
+                        > {node.id()}: {this.state.funcId.get(nodeLabel)} | {nodeLabel} {durationMs ? (durationMs.toFixed(0) + 'ms') : ""}  { this.props.cost ? '$' + costDollar.toFixed(7) : ''}</div>
+                    </div> 
                 );
             }
-
         });
 
 

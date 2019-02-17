@@ -70,7 +70,8 @@ class App extends React.Component {
     }
 
     onGraphSelected(graphId) {
-        console.log(`selected graph ${graphId}`);
+
+        //console.log(`selected graph ${graphId}`);
         this.state.currentGraphId = graphId;
         this.state.controller.subscribe(graphId);
         this.state.currentNode = null;
