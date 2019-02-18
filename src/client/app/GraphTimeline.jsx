@@ -22,7 +22,7 @@ class GraphTimeline extends React.Component {
             intervalTimer: -1,
             autoScroll: props.graph.isLive(),
             autoVScroll: true,
-            width: 1200,
+            width: 1200, 
             pendingWidth: 160,
 
             zoomLineHeight: 100,
@@ -42,7 +42,7 @@ class GraphTimeline extends React.Component {
             scrollBarHeight: 300,
             // id()
             selectedDeps: new Map(),
-            nodeHeight: 30,
+            nodeHeight: 24,
 
             appsId: new Array(), // will hold all Apps Id
             funcId: new Map(), // funcId-funcName
@@ -83,7 +83,7 @@ class GraphTimeline extends React.Component {
                 //console.log('fetchFuncId for apps ' + appId + ' with '+ json.items.length + ' items.')
                 let functions = new Map();
                 for (var i = 0; i < json.items.length; i++) {
-                    console.log('fetchFuncId |  >> ' + json.items[i].id + ' : ' + json.items[i].name);
+                    //console.log('fetchFuncId |  >> ' + json.items[i].id + ' : ' + json.items[i].name);
                     functions.set(json.items[i].id, json.items[i].name);
                     this.state.funcId.set(json.items[i].id, json.items[i].name);
                 }
@@ -309,7 +309,7 @@ class GraphTimeline extends React.Component {
 
         let pendingElems = [(<div key='pending-title'
                                   className={styles.pendingTitle}
-        > Pending Events: </div>)];
+        > Pending Events</div>)];
 
         let nodeElements = [];
         let totalCostDollar = 0.0;
@@ -392,26 +392,25 @@ class GraphTimeline extends React.Component {
                 nodeLabel = node.op;
             }
 
-            //dd
+            // dd
+            // {node.id()}: {this.state.funcId.get(nodeLabel)}<br/> {nodeLabel} {durationMs ? (durationMs.toFixed(0) + 'ms') : ""}  { this.props.cost ? '$' + costDollar.toFixed(7) : ''}</div>
             if (displayNode) {
                 nodeElements.push(<div key={node.id() + "_1"}>
                         <div className={styles.node + ' ' + styleExtra.join(' ')}
                              style={runboxStyle}
                              onClick={(e) => this.selectNode(node)}
                              data-tooltip={node.op + ": " + node.state + "\n" + deps}
-                        > {node.id()}: {this.state.funcId.get(nodeLabel)} | {nodeLabel} {durationMs ? (durationMs.toFixed(0) + 'ms') : ""}  { this.props.cost ? '$' + costDollar.toFixed(7) : ''}</div>
+                        >{node.id()}: {this.state.funcId.get(nodeLabel) ? this.state.funcId.get(nodeLabel) : nodeLabel} {durationMs ? (durationMs.toFixed(0) + 'ms') : ""}</div>
                     </div> 
                 );
             }
         });
 
-
         this.state.timeline.pendingNodes.forEach((node, idx) => {
 
-
             let styleExtra = [styles.pending];
-
             let deps = "";
+
             if ((node.dependencies.length !== 0)) {
                 deps = "Dependencies: Stage " + node.dependencies.map(n => n.id());
             }
@@ -422,7 +421,7 @@ class GraphTimeline extends React.Component {
             let pendingboxStyle = {
                 left: '3px',
                 position: 'absolute',
-                height: '20px',
+                height: '16px',
                 top: '' + ((index + 1) * this.state.nodeHeight) + 'px',
             };
             let pendElem = (<div key={node.id() + "_1"} className={styles.node + ' ' + styleExtra.join(' ')}
@@ -435,7 +434,6 @@ class GraphTimeline extends React.Component {
 
         let leftPosition;
         if ((relativeX(this.state.maxTimeStamp) < this.state.viewPortWidth)) {
-
             leftPosition = {left: relativeX(this.state.maxTimeStamp), height: this.state.graphHeight + 'px'}
         } else {
             leftPosition = {visibility: 'hidden'};

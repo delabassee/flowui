@@ -2,16 +2,17 @@
 .logArea {
     display: inline-block;
     min-height: 200px;
-    min-width: 810px;
+    min-width: 810px; 
     width: 100%;
     padding: 10px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 .logHeader {
+    font-family: Arial;
     width: 100%;
     color: #FFF;
-    font-size: 17pt;
+    font-size: 14px;
     padding: 10px 10px 5px 8px;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
@@ -32,7 +33,7 @@
 }
 
 .callDetails {
-    font-size: 10pt;
+    font-size: 12px;
     color: #DDD;
     padding: 3px 0 3px 25px;
     display: block;
@@ -54,7 +55,6 @@
     text-align: center;
     margin: 15px 0;
 }
-
 
 .causedBy:after { content: '';
     position: relative;
@@ -104,7 +104,7 @@
 .logEntry {
     width: 100%;
     font-family: Courier, serif;
-    font-size: 10pt;
+    font-size: 18pt;
     color: #CCCCCC;
     background: #000;
     overflow: auto;
@@ -127,19 +127,19 @@
 .logNodeInner {
     margin-top:5px;
     border: 1px solid rgba(0, 0, 0, 0.25);
-
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
 }
 
 .mainNode div.logHeader {
-    font-size: 16pt;
+    font-family: Arial;
+    font-size: 12px;
     font-weight: bold;
 }
 
 .mainNode div.logNodeInner {
+    font-family: Arial;
     margin-top:0px;
-
     border: 2px solid rgba(0, 0, 0, 0.4);
-    font-size: 16pt;
+    font-size: 12px;
 }

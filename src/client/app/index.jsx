@@ -85,7 +85,7 @@ class App extends React.Component {
         if (this.state.currentGraphId == null) {
             return (
                 <div>
-                    Select a graph or start running.
+                    Select a Flow or start running one.
                 </div>
             );
         }
@@ -102,14 +102,14 @@ class App extends React.Component {
         if (this.state.mode === 'timeline') {
             return (
                 <div>
-                    <GraphTimeline graph={graph} height='800' onNodeSelected={this.onNodeSelected} dollarsPerMs={this.dollarsPerMs} cost={this.cost}/>
+                    <GraphTimeline graph={graph} height='400' onNodeSelected={this.onNodeSelected} dollarsPerMs={this.dollarsPerMs} cost={this.cost}/>
                 </div>
             );
 
         } else {
             return (
                 <div>
-                    <SpringyView graph={graph} height='800' width='1024'
+                    <SpringyView graph={graph} height='400' width='1024'
                                  onNodeSelected={this.onNodeSelected}/>
                 </div>
             );

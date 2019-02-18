@@ -162,7 +162,6 @@ class NodeDetail extends React.Component {
         }
 
         return (<div className={styles.nodeInfoBox}>
-            <h3>Stage details</h3>
             <div style={{display: 'flex'}}>
                 <div className={styles.logArea}>
                     {fullLogs}
@@ -170,10 +169,6 @@ class NodeDetail extends React.Component {
                 <div className={styles.nodeInfo} style={{display: 'block'}}>
                     Created: {this.formatTime(this.state.node.created)}<br/>
                     {triggered}<br/>
-                    {call_queued}
-                    {call_running}
-                    {call_total}
-                    {call_cost}
                 </div>
             </div>
         </div>);
