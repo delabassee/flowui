@@ -223,6 +223,7 @@ class GraphTimeline extends React.Component {
         if (node === this.state.selectedNode) {
             node = null;
         }
+        node.funcName = this.state.funcId.get(node.function_id);
         this.state.selectedNode = node;
         this.state.onNodeSelected(this.state.graph, node);
         this.state.autoScroll = false;

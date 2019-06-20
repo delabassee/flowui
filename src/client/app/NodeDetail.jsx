@@ -51,9 +51,9 @@ class NodeDetail extends React.Component {
 
         function nodeTitle(node) {
             if (node.op === 'main') {
-                return node.function_id + " (main call)"
+                return node.funcName + " (main call)"
             } else if (node.op === 'invokeFunction') {
-                return node.function_id;
+                return node.funcName;
             } else {
                 return node.op;
             }

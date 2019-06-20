@@ -2,6 +2,40 @@
 
 Visualisation tool for showing what's going on with Fn Flow in real time. 
 
+## June 2019 notes
+
+
+	
+
+
+### Run locally (port 1979)
+
+```
+npm install
+node server.js
+npm run-script run
+```
+
+And then build the image `docker build -t flowui .`	
+
+
+```
+GraphTimeline.jsx:fetchApps() 
+	/fn/v2/apps -> http://localhost:8080/v2/apps
+
+GraphTimeline.jsx:fetchFuncId(appId)
+	-> http://localhost:8080/v2/fns?app_id=01D6S7HA7XNG8G00GZJ0000002
+
+GraphTimeline.jsx:selectNode(node)...
+	node.funcName = this.state.funcId.get(node.function_id);
+
+GraphTimeline.jsx:render()
+
+
+NodeDetail.jsx:nodeTitle()
+
+```
+
 ## Running with Docker
 
 Assuming you are already running Fn Server on port 8080 and Flow Server (previously known as 'Completer') on port 8081 in Docker.
