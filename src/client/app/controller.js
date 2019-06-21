@@ -7,7 +7,6 @@ class Controller {
     constructor(client, onChanged) {
         this.known_graphs = new Set();
         this.active_graphs = new Map();
-
         this.client = client;
         this.handleGraphEvent = this.handleGraphEvent.bind(this);
         this.handleLifecycleEvent = this.handleLifecycleEvent.bind(this);
@@ -28,7 +27,7 @@ class Controller {
     }
 
     handleGraphEvent(event) {
-        console.debug("Processing graph event", event)
+        //console.debug("Processing graph event", event)
         let graph;
         let flow_id = event.flow_id;
 

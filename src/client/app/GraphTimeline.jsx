@@ -40,7 +40,6 @@ class GraphTimeline extends React.Component {
             verticalScrollRatio: 0,
 
             scrollBarHeight: 300,
-            // id()
             selectedDeps: new Map(),
             nodeHeight: 24,
 
@@ -71,17 +70,21 @@ class GraphTimeline extends React.Component {
                     this.fetchFuncId(json.items[i].id);
                 }
             });        
-    }
+				console.log("Fethcing Apps Id");
+
+	 }
 
     fetchFuncId(appId){
         let url = '/fn/v2/fns?app_id='+appId;
-        fetch(url)
+
+		  let functions = new Map();
+        
+		  fetch(url)
             .then((response) => {
                 return response.json()
             })
             .then((json) => {
                 //console.log('fetchFuncId for apps ' + appId + ' with '+ json.items.length + ' items.')
-                let functions = new Map();
                 for (var i = 0; i < json.items.length; i++) {
                     //console.log('fetchFuncId |  >> ' + json.items[i].id + ' : ' + json.items[i].name);
                     functions.set(json.items[i].id, json.items[i].name);
@@ -146,7 +149,6 @@ class GraphTimeline extends React.Component {
 
         let timeline;
         if (this.state.lastEvent !== lastGraphEvent) {
-            //console.debug("Updating graph");
             timeline = update.timeline = graph.createTimeline(this.isNodeShownByDefault);
             update.lastEvent = lastGraphEvent;
         } else {
@@ -220,14 +222,13 @@ class GraphTimeline extends React.Component {
     }
 
     selectNode(node) {
-        if (node === this.state.selectedNode) {
-            node = null;
-        }
-        node.funcName = this.state.funcId.get(node.function_id);
-        this.state.selectedNode = node;
-        this.state.onNodeSelected(this.state.graph, node);
-        this.state.autoScroll = false;
-        this.setState(this.state);
+        if (node !== this.state.selectedNode) { // DD selected a diff node?
+			  //node.funcName = this.state.funcId.get(node.function_id); // BUG as only when selected!
+          this.state.selectedNode = node;
+          this.state.onNodeSelected(this.state.graph, node);
+          this.state.autoScroll = false;
+          this.setState(this.state);
+       }
     }
 
     createWaitingElem(idx, nodeHeight, fromTs, duration) {
@@ -315,7 +316,10 @@ class GraphTimeline extends React.Component {
         let nodeElements = [];
         let totalCostDollar = 0.0;
 
+
         this.state.timeline.activeNodes.forEach((node, idx) => {
+		  // Add functionName
+			 	node.funcName = this.state.funcId.get(node.function_id);
 
             let createTs = relativeX(node.created);
 

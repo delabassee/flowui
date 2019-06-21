@@ -7,10 +7,9 @@ class NodeDetail extends React.Component {
 
     constructor(props) {
         super(props)
-        //console.log(props);
-
         this.state = {
             node: props.node,
+//				DDfuncName: props.node.funcName,
             nodeLogs: props.nodeLogs || new Map(),
             nodeCalls: props.nodeCalls || new Map(),
         };
@@ -18,7 +17,6 @@ class NodeDetail extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        // console.log("new props",props);
         this.setState(props);
     }
 
@@ -26,7 +24,6 @@ class NodeDetail extends React.Component {
     }
 
     formatTime(timeStamp) {
-
         var date = new Date(timeStamp);
         //return date.toTimeString();
         var hours = "0" + date.getHours();
@@ -49,11 +46,14 @@ class NodeDetail extends React.Component {
         let call_cost = "";
 
 
-        function nodeTitle(node) {
+        function nodeTitle(node, funcyname) {
             if (node.op === 'main') {
-                return node.funcName + " (main call)"
+                var detail = node.funcName || ""; // workaround if no function name
+                detail += " (main call)";
+                return detail;
             } else if (node.op === 'invokeFunction') {
-                return node.funcName;
+                var detail = node.funcName || node.function_id; // workaround if no function name
+                return detail;
             } else {
                 return node.op;
             }
@@ -102,7 +102,7 @@ class NodeDetail extends React.Component {
                         break;
                 }
 
-                let title = nodeTitle(node);
+                let title = nodeTitle(node, this.state.funcName);
                 let currentNode = [];
                 let outerTitle = "";
                 if (idx !== 0) {
@@ -113,10 +113,10 @@ class NodeDetail extends React.Component {
                 currentNode.push(
                     (<div key={node.id() + '-header'} className={[styles.logHeader, badgeStyle].join(" ")}>
                         <div className={styles.rightHeader}>{node.started ? this.formatTime(node.started) : "pending"}</div>
-                        <Glyphicon glyph={icon}/> {title} 
+                        <Glyphicon glyph={icon}/> <div className={styles.title}> {title} </div>
                         <div key={node.id() + '-calldetails'} className={styles.callDetails}>
                             <div key={node.id() + '-callid'} className={styles.callId}>{node.call_id ? "Call ID: " + node.call_id : ""}</div>
-                            <div key={node.id() + '-codeloc'} className={styles.codeLocation}>Code Location: {node.code_location}</div>
+                            <div key={node.id() + '-codeloc'} className={styles.codeLocation}>{node.code_location ? "↪ " + node.code_location : ""}</div>
                         </div>
                     </div>));
 
@@ -166,7 +166,7 @@ class NodeDetail extends React.Component {
                 <div className={styles.logArea}>
                     {fullLogs}
                 </div>
-                <div className={styles.nodeInfo} style={{display: 'block'}}>
+                <div className={styles.timestampInfo} style={{display: 'block'}}>
                     Created: {this.formatTime(this.state.node.created)}<br/>
                     {triggered}<br/>
                 </div>
