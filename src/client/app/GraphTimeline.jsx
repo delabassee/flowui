@@ -24,21 +24,17 @@ class GraphTimeline extends React.Component {
             autoVScroll: true,
             width: 1200, 
             pendingWidth: 160,
-
             zoomLineHeight: 100,
             viewPortWidth: props.size.width - 150,
             viewPortHeight: props.height - 100,
-
             height: props.height,
             zoomLevel: 2,
             pxPerMs: zoomLevels[2],
-
             graphHeight: 0,
             dragging: false,
             dragStartY: 0,
             verticalScrollPosition: 0,
             verticalScrollRatio: 0,
-
             scrollBarHeight: 300,
             selectedDeps: new Map(),
             nodeHeight: 24,
@@ -76,10 +72,9 @@ class GraphTimeline extends React.Component {
 
     fetchFuncId(appId){
         let url = '/fn/v2/fns?app_id='+appId;
-
-		  let functions = new Map();
+        let functions = new Map();
         
-		  fetch(url)
+        fetch(url)
             .then((response) => {
                 return response.json()
             })

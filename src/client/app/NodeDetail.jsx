@@ -46,7 +46,7 @@ class NodeDetail extends React.Component {
         let call_cost = "";
 
 
-        function nodeTitle(node, funcyname) {
+        function nodeTitle(node) {
             if (node.op === 'main') {
                 var detail = node.funcName || ""; // workaround if no function name
                 detail += " (main call)";
@@ -102,7 +102,7 @@ class NodeDetail extends React.Component {
                         break;
                 }
 
-                let title = nodeTitle(node, this.state.funcName);
+                let title = nodeTitle(node);
                 let currentNode = [];
                 let outerTitle = "";
                 if (idx !== 0) {

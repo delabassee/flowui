@@ -30,12 +30,11 @@ class App extends React.Component {
         this.setMode = this.setMode.bind(this);
         this.loadNodeData = this.loadNodeData.bind(this);
 
-		  this.dollarsPerMs = 3.08e-9;
+		  this.dollarsPerMs = 2.08e-9;
         const search = props.location.search; 
         const params = new URLSearchParams(search);
         this.cost = params.get('cost');
 
-        this.state.funcIdsMap = "initial value";
         this.state.currentGraphId = null;
 
         if (props.match.path === '/mock') {
@@ -128,8 +127,7 @@ class App extends React.Component {
                   nodeLogs={this.state.nodeLogs}
                   nodeCalls={this.state.nodeCalls}
                   dollarsPerMs={this.dollarsPerMs}
-                  cost={this.cost}
-                  funcIdsMap={this.state.funcIdsMap} />
+                  cost={this.cost} />
             </div>
         );
     }
