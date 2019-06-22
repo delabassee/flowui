@@ -54,7 +54,7 @@ The Flow UI should be available on http://localhost:3000.
 
 You need nodejs (tested with 8.5.0).
 
-This assumes that the Flow Server (pka 'Completer') is running on 127.0.0.1:8081 and the corresponding Fn Server is running on 8080.
+This assumes that the Flow Server (aka 'Completer') is running on 127.0.0.1:8081 and the corresponding Fn Server is running on 8080.
 
 ```bash
  npm install 
